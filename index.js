@@ -16,6 +16,12 @@ mongoose.connect(connectionString)
   .then(() => console.log("Database connected successfully"))
   .catch(err => console.log("Database connection error:", err))
 
+
+// Root route | UptimeRobot Monitor
+app.get('/', (req, res) => {
+  res.send('Server is running!')
+})
+
 // Create Client
 app.post('/clients', (req, res) => {
   const { email } = req.body
