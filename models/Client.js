@@ -14,6 +14,6 @@ const ClientSchema = new mongoose.Schema({
   discountsClaimed: { type: Number, required: true },
   totalSpent: { type: Number, required: true },
   averageExpenditure: { type: Number, required: true }
-});
+})
 
-module.exports = mongoose.model("Client", ClientSchema);
+module.exports = ClientSchema
