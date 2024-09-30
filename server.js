@@ -9,8 +9,6 @@ const clientsRoute = require('./routes/clients')
 const app = express()
 app.use(express.json())
 
-
-const cors = require('cors');
 const allowedOrigins = ['https://lattefy.github.io']
 app.use(cors({
   origin: (origin, callback) => {
@@ -21,8 +19,6 @@ app.use(cors({
     }
   }
 }))
-
-
 
 // Root route for uptime check
 app.get('/', (req, res) => {
