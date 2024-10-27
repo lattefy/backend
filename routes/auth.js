@@ -52,7 +52,7 @@ module.exports = (usersConnection) => {
 
     // Helper function to generate an access token
     function generateAccessToken(user) {
-        return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' })
+        return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '120s' })
     }
 
     return router
