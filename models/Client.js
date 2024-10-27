@@ -5,6 +5,9 @@ const ClientSchema = new mongoose.Schema({
   phoneNumber: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   birthDate: { type: String, required: true },
+  // Fidelity Card (password)
+  password: { type: String, required: false },
+  //
   lastRating: { type: Number, required: true },
   averageRating: { type: Number, required: true },
   discountAvailable: { type: Boolean, required: true },

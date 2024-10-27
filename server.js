@@ -1,25 +1,16 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const usersRoute = require('./routes/users')
 const clientsRoute = require('./routes/clients')
+const authRoute = require('./routes/auth') // Import the auth route
 
 const app = express()
 app.use(express.json())
-
 app.use(cors())
-// const allowedOrigins = ['https://lattefy.github.io']
-// app.use(cors({
-//   origin: (origin, callback) => {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }))
 
 // Root route for uptime check
 app.get('/', (req, res) => {
@@ -46,13 +37,26 @@ clientsConnection
     .then(() => console.log("Clients db connected"))
     .catch(err => console.log("Clients db connection error:", err))
 
-// Define the routes --> connection
-app.use('/users', usersRoute(usersConnection)) 
-app.use('/clients', clientsRoute(clientsConnection))
+// Middleware for JWT verification
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (!token) return res.sendStatus(401)
 
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        req.user = user
+        next()
+    })
+}
+
+// Define the routes
+app.use('/auth', authRoute(usersConnection)) // Add authentication route
+app.use('/users', authenticateToken, usersRoute(usersConnection))
+app.use('/clients', authenticateToken, clientsRoute(clientsConnection))
 
 // Start the server
 const PORT = process.env.PORT || 3089
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
+    console.log(`Server is running on port ${PORT}`)
 })
