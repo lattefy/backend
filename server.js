@@ -24,6 +24,12 @@ app.use(cors({
   }
 }))
 
+// Disable Interest Cohort
+app.use((req, res, next) => {
+  res.setHeader('Permissions-Policy', 'interest-cohort=()')
+  next()
+})
+
 // Root route for uptime check
 app.get('/', (req, res) => {
     res.send('Server is running!')
